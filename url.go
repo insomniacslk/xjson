@@ -35,7 +35,6 @@ func (xu URL) MarshalJSON() ([]byte, error) {
 }
 
 func stripQuotes(s string) (string, error) {
-	log.Printf("S %s %c %c", s, s[0], s[len(s)-1])
 	if len(s) < 2 || (s[0] != '"' && s[len(s)-1] != '"') {
 		return s, errors.New("not a properly double-quoted string")
 	}
