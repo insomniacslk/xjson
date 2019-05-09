@@ -34,3 +34,16 @@ func TestURLUnmarshallerQuotes(t *testing.T) {
 	// unquoting is not supported yet
 	require.Error(t, err)
 }
+
+func TestURLMarshaller(t *testing.T) {
+	j := tmp{
+		URL: URL{
+			Scheme: "https",
+			Host:   "insomniac.slackware.it",
+		},
+	}
+	want := []byte("{\"URL\":\"https://insomniac.slackware.it\"}")
+	b, err := json.Marshal(&j)
+	require.NoError(t, err)
+	require.Equal(t, want, b)
+}
