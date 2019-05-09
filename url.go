@@ -2,7 +2,6 @@ package xjson
 
 import (
 	"errors"
-	"log"
 	"net/url"
 )
 
@@ -30,7 +29,6 @@ func (xu *URL) UnmarshalJSON(b []byte) error {
 
 // MarshalJSON implements the json.Marshaller interface.
 func (xu URL) MarshalJSON() ([]byte, error) {
-	log.Print(xu.String())
 	return []byte("\"" + xu.String() + "\""), nil
 }
 
