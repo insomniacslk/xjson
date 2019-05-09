@@ -11,7 +11,7 @@ type tmp struct {
 	URL URL
 }
 
-func TestURLUnmarshaller(t *testing.T) {
+func TestURLUnmarshal(t *testing.T) {
 	// test valid file://
 	data := []byte(`{
     "URL": "file://localhost/some/file.txt"
@@ -24,18 +24,44 @@ func TestURLUnmarshaller(t *testing.T) {
 	require.Equal(t, "/some/file.txt", j.URL.Path)
 }
 
-func TestURLUnmarshallerQuotes(t *testing.T) {
-	// test valid file://
+func TestURLUnmarshalEmptyString(t *testing.T) {
 	data := []byte(`{
-    "URL": "file://localh\ost/some/file.txt"
+    "URL": ""
 }`)
 	var j tmp
 	err := json.Unmarshal(data, &j)
-	// unquoting is not supported yet
+	require.NoError(t, err)
+	require.Equal(t, URL{}, j.URL)
+}
+
+func TestURLUnmarshalShortString(t *testing.T) {
+	data := []byte(`{
+    "URL": 1
+}`)
+	var j tmp
+	err := json.Unmarshal(data, &j)
 	require.Error(t, err)
 }
 
-func TestURLMarshaller(t *testing.T) {
+func TestURLUnmarshalBadType(t *testing.T) {
+	data := []byte(`{
+    "URL": 1
+}`)
+	var j tmp
+	err := json.Unmarshal(data, &j)
+	require.Error(t, err)
+}
+
+func TestURLUnmarshalBadURL(t *testing.T) {
+	data := []byte(`{
+    "URL": "://blah"
+}`)
+	var j tmp
+	err := json.Unmarshal(data, &j)
+	require.Error(t, err)
+}
+
+func TestURLMarshal(t *testing.T) {
 	j := tmp{
 		URL: URL{
 			Scheme: "https",

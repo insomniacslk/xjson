@@ -1,6 +1,7 @@
 package xjson
 
 import (
+	"errors"
 	"log"
 	"net/url"
 )
@@ -15,7 +16,11 @@ func (xu URL) String() string {
 
 // UnmarshalJSON implements the json.Unmarshaller interface.
 func (xu *URL) UnmarshalJSON(b []byte) error {
-	u, err := url.Parse(stripQuotes(string(b)))
+	s, err := stripQuotes(string(b))
+	if err != nil {
+		return err
+	}
+	u, err := url.Parse(s)
 	if err != nil {
 		return err
 	}
@@ -29,10 +34,10 @@ func (xu URL) MarshalJSON() ([]byte, error) {
 	return []byte("\"" + xu.String() + "\""), nil
 }
 
-func stripQuotes(s string) string {
-	if len(s) < 2 || s[0] != '"' || s[len(s)-1] != '"' {
-		return s
+func stripQuotes(s string) (string, error) {
+	log.Printf("S %s %c %c", s, s[0], s[len(s)-1])
+	if len(s) < 2 || (s[0] != '"' && s[len(s)-1] != '"') {
+		return s, errors.New("not a properly double-quoted string")
 	}
-	// TODO unquote backslashes etc
-	return s[1 : len(s)-1]
+	return s[1 : len(s)-1], nil
 }
