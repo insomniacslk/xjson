@@ -11,7 +11,7 @@ type Error struct {
 	Err error
 }
 
-func NewError(e error) Error { return Error{Err: e} }
+func NewError(e error) *Error { return &Error{Err: e} }
 
 func (xe *Error) Error() string { return xe.Err.Error() }
 

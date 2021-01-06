@@ -10,7 +10,7 @@ import (
 )
 
 type tmpError struct {
-	Error Error
+	Error *Error
 }
 
 func TestErrorUnmarshal(t *testing.T) {
@@ -20,7 +20,7 @@ func TestErrorUnmarshal(t *testing.T) {
 	var j tmpError
 	err := json.Unmarshal(data, &j)
 	require.NoError(t, err)
-	want := tmpError{Error: Error{Err: errors.New("example error message")}}
+	want := tmpError{Error: &Error{Err: errors.New("example error message")}}
 
 	assert.Equal(t, want, j)
 }
@@ -36,7 +36,7 @@ func TestErrorUnmarshalEmptyString(t *testing.T) {
 
 func TestErrorMarshal(t *testing.T) {
 	j := tmpError{
-		Error: Error{
+		Error: &Error{
 			Err: errors.New("example error message"),
 		},
 	}
