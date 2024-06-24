@@ -29,11 +29,7 @@ func (xt *TimeUnix) UnmarshalJSON(b []byte) error {
 }
 
 func timeUnixUnmarshaller(b []byte) (time.Time, error) {
-	s, err := stripQuotes(string(b))
-	if err != nil {
-		return time.Time{}, err
-	}
-	ts, err := strconv.ParseInt(s, 10, 64)
+	ts, err := strconv.ParseInt(string(b), 10, 64)
 	if err != nil {
 		return time.Time{}, err
 	}
@@ -42,5 +38,5 @@ func timeUnixUnmarshaller(b []byte) (time.Time, error) {
 
 // MarshalJSON implements the json.Marshaller interface.
 func timeUnixMarshaller(t time.Time) ([]byte, error) {
-	return []byte(fmt.Sprintf(`"%d"`, t.Unix())), nil
+	return []byte(fmt.Sprintf(`%d`, t.Unix())), nil
 }

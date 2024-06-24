@@ -29,7 +29,7 @@ type tmpTimeUnix struct {
 }
 
 func TestTimeUnixUnmarshal(t *testing.T) {
-	data := []byte(fmt.Sprintf(`{"TimeUnix": "%d"}`, testUnixTs))
+	data := []byte(fmt.Sprintf(`{"TimeUnix": %d}`, testUnixTs))
 	var j tmpTimeUnix
 	err := json.Unmarshal(data, &j)
 	require.NoError(t, err)
@@ -59,7 +59,7 @@ func TestTimeUnixMarshal(t *testing.T) {
 	j := tmpTimeUnix{
 		TimeUnix: TimeUnix(testUnixTime),
 	}
-	want := []byte(fmt.Sprintf(`{"TimeUnix":"%d"}`, testUnixTs))
+	want := []byte(fmt.Sprintf(`{"TimeUnix":%d}`, testUnixTs))
 	b, err := json.Marshal(&j)
 	require.NoError(t, err)
 	assert.Equal(t, want, b)
